@@ -28,6 +28,7 @@ public class Display extends Application {
 	private ComboBox comboBox;
 	private long startTime;
 	private long endTime;
+	//private Group root;
 	
 //	private class Timer extends AnimationTimer {
 //		private static final int FRAMES_PER_SEC = 60;
@@ -90,16 +91,32 @@ public class Display extends Application {
 		comboBox.setTranslateY(MENU_HEIGHT*2);
 		root.getChildren().add(comboBox);
 		
-		Button button = new Button("Sort!");
-		button.setPrefWidth(MENU_WIDTH); 
-		button.setPrefHeight(MENU_HEIGHT);
-		button.setTranslateX(WINDOW_WIDTH/2 - MENU_WIDTH/2);
-		button.setTranslateY(MENU_HEIGHT*4);
-		root.getChildren().add(button);
+		Button sort = new Button("Sort!");
+		sort.setPrefWidth(MENU_WIDTH); 
+		sort.setPrefHeight(MENU_HEIGHT);
+		sort.setTranslateX(WINDOW_WIDTH/2 - MENU_WIDTH/2);
+		sort.setTranslateY(MENU_HEIGHT*4);
+		root.getChildren().add(sort);
 		
+		Button randomize = new Button("Randomize!");
+		randomize.setPrefWidth(MENU_WIDTH); 
+		randomize.setPrefHeight(MENU_HEIGHT);
+		randomize.setTranslateX(WINDOW_WIDTH - 3*MENU_WIDTH/2);
+		randomize.setTranslateY(MENU_HEIGHT*4);
+		root.getChildren().add(randomize);
+		
+		
+		randomize.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+		    @Override 
+		    public void handle(ActionEvent e) {
+		    	randomizeButtonClicked();
+		    	for (Rectangle elem: rectArray) root.getChildren().add(elem);
+		    }
+		});
+
 		
 		//what happens if the sort button is clicked
-		button.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+		sort.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 		    @Override 
 		    public void handle(ActionEvent e) {
 		    	sortButtonClicked();
@@ -134,26 +151,47 @@ public class Display extends Application {
 		
 	}
 	
+	
 	public void sortButtonClicked() {
 
     	String menuChoice = (String)comboBox.getValue();
     	ArrayList<Integer> newArr = masterCopyArray;
-    	if (menuChoice.equals("Selection Sort")) {
-    		newArr = sorter.selectionSort(masterCopyArray);
-    	} else if (menuChoice.equals("Gnome Sort")) {
-    		newArr = sorter.gnomeSort(masterCopyArray);
-    	} else if (menuChoice.equals("Bubble Sort")) {
-    		newArr = sorter.bubbleSort(masterCopyArray);
+    	if (menuChoice != null) {
+    		if (menuChoice.equals("Selection Sort")) {
+        		newArr = sorter.selectionSort(masterCopyArray);
+        	} else if (menuChoice.equals("Gnome Sort")) {
+        		newArr = sorter.gnomeSort(masterCopyArray);
+        	} else if (menuChoice.equals("Bubble Sort")) {
+        		newArr = sorter.bubbleSort(masterCopyArray);
+        	}
+        	for (Rectangle elem: rectArray) elem.setVisible(false);
+        	for (int i = 0; i < newArr.size(); i++) {
+    			Rectangle rect = new Rectangle(RECT_WIDTH, newArr.get(i));
+    			rect.setStyle("-fx-fill: #32b10a");
+    			rectArray.set(i, rect);
+    		}
     	}
-    	for (Rectangle elem: rectArray) elem.setVisible(false);
-    	for (int i = 0; i < newArr.size(); i++) {
-			Rectangle rect = new Rectangle(RECT_WIDTH, newArr.get(i));
-			rect.setStyle("-fx-fill: #32b10a");
-			rectArray.set(i, rect);
+	}
+	
+	public void randomizeButtonClicked() {
+		
+		for (int i = 0; i < DATA_ELEMENTS_LIMIT; i++) {
+			rectArray.get(i).setVisible(false);
+			masterCopyArray.set(i, (int)(Math.random()*(DATA_VALUE_LIMIT)+1)); 
+			rectArray.set(i, new Rectangle(RECT_WIDTH, masterCopyArray.get(i)));
+			rectArray.get(i).setVisible(true);
+			int x = SPACE_BETWEEN_RECT/2;
+			int y = WINDOW_HEIGHT - 10;
+			for (Rectangle elem: rectArray) {
+				elem.setX(x);
+				elem.setStyle("-fx-fill: #32b10a");
+				x += SPACE_BETWEEN_RECT + RECT_WIDTH;
+				elem.setY(y - elem.getHeight());
+				//root.getChildren().addAll(elem);
+			}
+			//reassigning random numbers in master copy array
 		}
-    	
-    	
-    	
+		
 	}
 
 }
