@@ -9,6 +9,7 @@ public class Sorts {
 		// System.out.println(sort.gnomeSort(arr));
 		System.out.println(sort.bubbleSort(arr));
 		System.out.println(sort.selectionSort(arr));
+		//System.out.println(sort.gnomeSort(arr));
 	}
 	
 	public ArrayList<Integer> gnomeSort(ArrayList<Integer> arr) {
@@ -57,6 +58,7 @@ public class Sorts {
 		}
 		return ints;
 	}
+	
 	/*
 	public ArrayList<Integer> selectionSort(ArrayList<Integer> ints) {
 	

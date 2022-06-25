@@ -3,6 +3,8 @@ import javafx.animation.AnimationTimer;
 import javafx.application.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,7 +26,8 @@ public class Display extends Application {
 	private ArrayList<Rectangle> rectArray = new ArrayList<Rectangle>();
 	private Sorts sorter = new Sorts();
 	private ComboBox comboBox;
-	private long timeInNs;
+	private long startTime;
+	private long endTime;
 	
 //	private class Timer extends AnimationTimer {
 //		private static final int FRAMES_PER_SEC = 60;
@@ -75,8 +78,8 @@ public class Display extends Application {
 		ObservableList<String> options = 
 				FXCollections.observableArrayList(
 			        "Selection Sort",
-			        "Insertion Sort",
-			        "Bubble Sort"
+			        "Bubble Sort",
+			        "Gnome Sort"
 			    );
 		
 		comboBox = new ComboBox(options);
@@ -94,6 +97,33 @@ public class Display extends Application {
 		button.setTranslateY(MENU_HEIGHT*4);
 		root.getChildren().add(button);
 		
+		
+//		comboBox.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent e) {
+//				System.out.print(false);
+//			}
+//				
+//		});
+//		
+		
+		//what happens if the sort button is clicked
+		button.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+		    @Override 
+		    public void handle(ActionEvent e) {
+		    	sortButtonClicked();
+		    	
+		    	int x = SPACE_BETWEEN_RECT/2;
+				int y = WINDOW_HEIGHT - 10;
+				for (Rectangle elem: rectArray) {
+					elem.setX(x);
+					x += SPACE_BETWEEN_RECT + RECT_WIDTH;
+					elem.setY(y - elem.getHeight());
+					root.getChildren().addAll(elem);
+				}
+		    }
+		});
+		
 		/*
 		 * if the "sort" button is pressed: 
 		 * - access whatever option has been chosen for the combobox
@@ -106,5 +136,33 @@ public class Display extends Application {
 		stage.show();
 		
 	}
+	
+	public void sortButtonClicked() {
+
+    	String menuChoice = (String)comboBox.getValue();
+    	ArrayList<Integer> newArr = masterCopyArray;
+    	if (menuChoice.equals("Selection Sort")) {
+    		newArr = sorter.selectionSort(masterCopyArray);
+    	} else if (menuChoice.equals("Gnome Sort")) {
+    		newArr = sorter.gnomeSort(masterCopyArray);
+    	} else if (menuChoice.equals("Bubble Sort")) {
+    		newArr = sorter.bubbleSort(masterCopyArray);
+    	}
+    	for (Rectangle elem: rectArray) elem.setVisible(false);
+    	for (int i = 0; i < newArr.size(); i++) {
+			Rectangle rect = new Rectangle(RECT_WIDTH, newArr.get(i));
+			rect.setStyle("-fx-fill: #32b10a");
+			rectArray.set(i, rect);
+		}
+    	
+    	
+    	
+	}
 
 }
+
+
+
+
+
+
