@@ -98,15 +98,6 @@ public class Display extends Application {
 		root.getChildren().add(button);
 		
 		
-//		comboBox.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent e) {
-//				System.out.print(false);
-//			}
-//				
-//		});
-//		
-		
 		//what happens if the sort button is clicked
 		button.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 		    @Override 
@@ -123,17 +114,23 @@ public class Display extends Application {
 				}
 		    }
 		});
-		
-		/*
-		 * if the "sort" button is pressed: 
-		 * - access whatever option has been chosen for the combobox
-		 * - based on that chosen option call the right method on the array
-		 * - update what's shown on the screen by making a new Rectangle array and just showing that
-		 * - do the thing with the time (display nanoseconds taken at the top left)
-		 */
 
 		stage.setScene(scene);
 		stage.show();
+		
+		
+		/*
+		 * -------- PENDING STEPS ---------
+		 * - fix selection sort, add insertion sort (AVANI)
+		 * 
+		 * - maybe just get rid of gnome sort cuz it doesnt seem to be working
+		 * 
+		 * - add a third button to re-randomize a new set of data and re-display that (ADITI)
+		 *   so the user doesnt need to keep hitting run again
+		 *   
+		 * - display time somehow - problem with access across the Display and Sorts class
+		 * 
+		 */
 		
 	}
 	
