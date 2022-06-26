@@ -161,8 +161,7 @@ public class Display extends Application {
     		
     		if (menuChoice == null) {
     			System.out.println("choice is null");
-    		}
-    		if (menuChoice.equals("Selection Sort")) {
+    		} else if (menuChoice.equals("Selection Sort")) {
         		newArr = sorter.selectionSort(masterCopyArray);
         	} else if (menuChoice.equals("Gnome Sort")) {
         		newArr = sorter.gnomeSort(masterCopyArray);
