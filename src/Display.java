@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -28,22 +29,6 @@ public class Display extends Application {
 	private ArrayList<Integer> masterCopyArray = new ArrayList<Integer>(); //won't be changed
 	private ArrayList<Rectangle> rectArray = new ArrayList<Rectangle>();
 	
-	private ComboBox comboBox;
-	private long startTime;
-	private long endTime;
-	//private Group root;
-	
-//	private class Timer extends AnimationTimer {
-//		private static final int FRAMES_PER_SEC = 60;
-//		private int frames = FRAMES_PER_SEC*5; //5 seconds?
-//		public void handle(long now) {
-//			frames--;
-//			if (frames <= 0) {
-//				sorter.
-//			}
-//		}
-//	}
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
@@ -80,21 +65,6 @@ public class Display extends Application {
 			root.getChildren().addAll(elem);
 		}
 
-		
-		ObservableList<String> options = 
-				FXCollections.observableArrayList(
-			        "Selection Sort",
-			        "Bubble Sort",
-			        "Gnome Sort"
-			    );
-		
-		comboBox = new ComboBox(options);
-		comboBox.setPrefWidth(3*MENU_WIDTH/2); 
-		comboBox.setPrefHeight(MENU_HEIGHT);
-		comboBox.setPromptText("Type of sort:");
-		comboBox.setTranslateX(WINDOW_WIDTH/2 - MENU_WIDTH/2);
-		comboBox.setTranslateY(MENU_HEIGHT*2);
-		root.getChildren().add(comboBox);
 		
 		Button sort = new Button("Sort!");
 		sort.setPrefWidth(MENU_WIDTH); 
@@ -136,52 +106,34 @@ public class Display extends Application {
 				}
 		    }
 		});
+		
 
 		stage.setScene(scene);
 		stage.show();
-		
-		
-		/*
-		 * -------- PENDING STEPS ---------
-		 * - fix selection sort, add insertion sort (AVANI)
-		 * 
-		 * - maybe just get rid of gnome sort cuz it doesnt seem to be working
-		 * 
-		 * - add a third button to re-randomize a new set of data and re-display that (ADITI)
-		 *   so the user doesnt need to keep hitting run again
-		 *   
-		 * - display time somehow - problem with access across the Display and Sorts class
-		 * 
-		 */
-		
+	
 	}
 	
-	
 	public void sortButtonClicked() {
-
-    	String menuChoice = (String)comboBox.getValue();
-    	ArrayList<Integer> newArr = masterCopyArray;
+    	ArrayList<Integer> newArr = sorter.selectionSort(masterCopyArray);
     	//if (menuChoice != null) {
-    		System.out.println("1");
+    		//System.out.println("1");
     		
-    		if (menuChoice == null) {
-    			System.out.println("choice is null");
-    		} else if (menuChoice.equals("Selection Sort")) {
-        		newArr = sorter.selectionSort(masterCopyArray);
-        	} else if (menuChoice.equals("Gnome Sort")) {
-        		newArr = sorter.gnomeSort(masterCopyArray);
-        	} else if (menuChoice.equals("Bubble Sort")) {
-        		newArr = sorter.bubbleSort(masterCopyArray);
-        	}
+//    		if (menuChoice == null) {
+//    			System.out.println("choice is null");
+//    		} else if (menuChoice.equals("Selection Sort")) {
+//        		newArr = sorter.selectionSort(masterCopyArray);
+//        	} else if (menuChoice.equals("Gnome Sort")) {
+//        		newArr = sorter.gnomeSort(masterCopyArray);
+//        	} else if (menuChoice.equals("Bubble Sort")) {
+//        		newArr = sorter.bubbleSort(masterCopyArray);
+//        	}
+    		
         	for (Rectangle elem: rectArray) elem.setVisible(false);
         	for (int i = 0; i < newArr.size(); i++) {
     			Rectangle rect = new Rectangle(RECT_WIDTH, newArr.get(i)*4);
     			rect.setStyle("-fx-fill: #32b10a");
     			rectArray.set(i, rect);
     		}
-//    	} else {
-//    		System.out.println("2");
-//    	}
 	}
 	
 	
