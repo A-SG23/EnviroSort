@@ -50,18 +50,23 @@ public class Sorts {
 	}
 	
 	public ArrayList<Integer> selectionSort(ArrayList<Integer> arr) {
-		ArrayList<Integer> ints = arr;
-		int size = ints.size();
-		for(int i = 0; i < size - 1; i++) {
-			int min = i;
-			for(int j = 0; j < size; j++) {
-				if(ints.get(j) < ints.get(i)) min = j;
-			}
-			int t = arr.get(min);
-			arr.set(min, i);
-			arr.set(i, t);
-		}
-		return ints;
+		ArrayList<Integer> ints = arr; 
+		int n = ints.size();
+		 for (int i = 0; i < n-1; i++)
+	        {
+	            // Find the minimum element in unsorted array
+	            int min_idx = i;
+	            for (int j = i+1; j < n; j++)
+	                if (ints.get(j) < ints.get(min_idx))
+	                    min_idx = j;
+	  
+	            // Swap the found minimum element with the first
+	            // element
+	            int temp = ints.get(min_idx);
+	            ints.set(min_idx, ints.get(i));
+	            ints.set(i, temp);
+	        }
+		 return ints;
 	}
 	
 	/*
