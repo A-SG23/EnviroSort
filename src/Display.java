@@ -16,10 +16,10 @@ public class Display extends Application {
 	
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 500;
-	private static final int DATA_ELEMENTS_LIMIT = 80;
+	private static final int DATA_ELEMENTS_LIMIT = 5;
 	private static final int DATA_VALUE_LIMIT = WINDOW_HEIGHT/2;
 	private static final int SPACE_BETWEEN_RECT = 2;
-	private static final int RECT_WIDTH = (WINDOW_WIDTH - (DATA_ELEMENTS_LIMIT-1)*(SPACE_BETWEEN_RECT))/DATA_ELEMENTS_LIMIT;
+	private static final int RECT_WIDTH = (WINDOW_WIDTH - ((DATA_ELEMENTS_LIMIT-1)*SPACE_BETWEEN_RECT))/DATA_ELEMENTS_LIMIT;
 	private static final int MENU_HEIGHT = 25;
 	private static final int MENU_WIDTH = 100;
 	private ArrayList<Integer> masterCopyArray = new ArrayList<Integer>(); //won't be changed
@@ -156,7 +156,12 @@ public class Display extends Application {
 
     	String menuChoice = (String)comboBox.getValue();
     	ArrayList<Integer> newArr = masterCopyArray;
-    	if (menuChoice != null) {
+    	//if (menuChoice != null) {
+    		System.out.println("1");
+    		
+    		if (menuChoice == null) {
+    			System.out.println("choice is null");
+    		}
     		if (menuChoice.equals("Selection Sort")) {
         		newArr = sorter.selectionSort(masterCopyArray);
         	} else if (menuChoice.equals("Gnome Sort")) {
@@ -170,7 +175,9 @@ public class Display extends Application {
     			rect.setStyle("-fx-fill: #32b10a");
     			rectArray.set(i, rect);
     		}
-    	}
+//    	} else {
+//    		System.out.println("2");
+//    	}
 	}
 	
 	public void randomizeButtonClicked() {
