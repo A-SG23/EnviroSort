@@ -49,7 +49,7 @@ public class Display extends Application {
 		}
 		
 		for (int elem: masterCopyArray) {
-			Rectangle rect = new Rectangle(RECT_WIDTH, elem*4);
+			Rectangle rect = new Rectangle(RECT_WIDTH, elem*3);
 			rect.setStyle("-fx-fill: #32b10a");
 			rectArray.add(rect);
 		}
@@ -68,7 +68,7 @@ public class Display extends Application {
 		sort.setPrefWidth(MENU_WIDTH); 
 		sort.setPrefHeight(MENU_HEIGHT);
 		sort.setTranslateX(WINDOW_WIDTH/2 - MENU_WIDTH/2);
-		sort.setTranslateY(MENU_HEIGHT*4);
+		sort.setTranslateY(MENU_HEIGHT);
 		root.getChildren().add(sort);
 		
 //		Button randomize = new Button("Randomize!");
@@ -142,7 +142,7 @@ public class Display extends Application {
     		
         	for (Rectangle elem: rectArray) elem.setVisible(false);
         	for (int i = 0; i < ints.size(); i++) {
-    			Rectangle rect = new Rectangle(RECT_WIDTH, ints.get(i)*4);
+    			Rectangle rect = new Rectangle(RECT_WIDTH, ints.get(i)*3);
     			rect.setStyle("-fx-fill: #32b10a");
     			rectArray.set(i, rect);
     		}
