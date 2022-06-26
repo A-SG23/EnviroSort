@@ -20,10 +20,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Display extends Application implements EventHandler<MouseEvent> {
-	
 	private static Data data = new Data();
-	private static int[] tempArray = data.temperatureData();
-	private static String[] cityArray = data.getCities();
+	private int[] tempArray = data.temperatureData();
+	private String[] cityArray = data.getCities();
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 500;
 	private static final int DATA_ELEMENTS_LIMIT = data.temperatureData().length;
@@ -32,13 +31,15 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 	private static final int RECT_WIDTH = (WINDOW_WIDTH - ((DATA_ELEMENTS_LIMIT-1)*SPACE_BETWEEN_RECT))/DATA_ELEMENTS_LIMIT;
 	private static final int MENU_HEIGHT = 25;
 	private static final int MENU_WIDTH = 100;
-	private ArrayList<Integer> masterCopyArray = new ArrayList<Integer>(); //won't be changed
 	private ArrayList<Rectangle> rectArray = new ArrayList<Rectangle>();
 	private Timer timer;
 	//private Group root;
 	
 	private Rectangle rect1;
-	private Text info = new Text();
+	private Label info = new Label();
+	private Label lowest = new Label();
+	//private Label highest = new Label();
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -49,62 +50,69 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 
 		public void handle(long arg0) { //the timer's handle method
 			
-			int i = 0;
-			for (Rectangle elem: rectArray) { //for loop didnt work so for-each loop with a counter
-				// rect1 = rectArray.get(i);
+			//int i = 0;
+			for (int i = 0; i < rectArray.size(); i++) { //for loop didnt work so for-each loop with a counter
+				
+				Rectangle elem = rectArray.get(i);
 				rect1 = elem;
-				info = new Text();
-				info.setText(cityArray[i] + "; " + tempArray[i] + "F");
+				System.out.println(tempArray[i]);
+				
 				info.setStyle("-fx-fill: #000000");
 				info.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
+				lowest.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13));
 				
 				//info.setVisible(false);
+				int j = i;
 				rect1.setOnMouseEntered((EventHandler<MouseEvent>) new EventHandler<MouseEvent>() {
 					public void handle(MouseEvent mouseEvent) {
-//						info.setX((int)mouseEvent.getX());
-//						info.setY((int)mouseEvent.getY());
-						info.setX(elem.getX());
-						info.setY(elem.getY());
+						
+						lowest.setText(cityArray[j] + " " + tempArray[j] + "F");
+						
+						info.setLayoutX(elem.getX());
+						info.setLayoutY(elem.getY() - 13);
 						elem.setStyle("-fx-fill: #bbbbbb");
 						info.setVisible(true);
-						System.out.println("mouse entered");
+						lowest.setVisible(true);
 					}
 				});
 				
 				rect1.setOnMouseExited((EventHandler<MouseEvent>) new EventHandler<MouseEvent>() {
 					public void handle(MouseEvent mouseEvent) {
 						info.setVisible(false);
+						lowest.setVisible(false);
 						elem.setStyle("-fx-fill: #32b10a");
-						System.out.println("mouse exited");
+						
 					}
 				});
-				i++;
+				//i++;
 			}
 			
 		}
 		
 	}
-
+	
 	@Override
 	public void start(Stage stage) throws Exception {
+//		lowest.setVisible(false);
+//		highest.setVisible(false);
 		stage.setTitle("EnviroSort");
 		stage.setResizable(false);
 		
-		Group root = new Group(); //-------CHANGE IF IT CRASHES HEHEHE--------//
+		
+		Group root = new Group();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		stage.setScene(scene);
 		stage.show();
+		root.getChildren().addAll(info, lowest);
+	root.setStyle("-fx-background-color: #c8f0f7");
 		
-		for (int i = 0; i < DATA_ELEMENTS_LIMIT; i++) {
-			//masterCopyArray.add((int)(Math.random()*(DATA_VALUE_LIMIT)+1)); 
-			masterCopyArray.add(tempArray[i]);
-		}
-		
-		for (int elem: masterCopyArray) {
+		for (int elem: tempArray) {
 			Rectangle rect = new Rectangle(RECT_WIDTH, elem*3);
 			rect.setStyle("-fx-fill: #32b10a");
 			rectArray.add(rect);
-		}
+		} 
+		
+		for (int elem: tempArray) System.out.print(elem + " ");
 		
 		int x = SPACE_BETWEEN_RECT/2;
 		int y = WINDOW_HEIGHT - 10;
@@ -117,30 +125,14 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 		
 		timer = new Timer();
 		timer.start();
-		//root.getChildren().addAll(info);
 		
 		Button sort = new Button("Sort!");
 		sort.setPrefWidth(MENU_WIDTH); 
 		sort.setPrefHeight(MENU_HEIGHT);
 		sort.setTranslateX(WINDOW_WIDTH/2 - MENU_WIDTH/2);
 		sort.setTranslateY(MENU_HEIGHT);
+		sort.setStyle("-fx-fill: #aaaaaa");
 		root.getChildren().add(sort);
-		
-//		Button randomize = new Button("Randomize!");
-//		randomize.setPrefWidth(MENU_WIDTH); 
-//		randomize.setPrefHeight(MENU_HEIGHT);
-//		randomize.setTranslateX(WINDOW_WIDTH - 3*MENU_WIDTH/2);
-//		randomize.setTranslateY(MENU_HEIGHT*4);
-//		root.getChildren().add(randomize);
-//		
-//		
-//		randomize.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-//		    @Override 
-//		    public void handle(ActionEvent e) {
-//		    	randomizeButtonClicked();
-//		    	for (Rectangle elem: rectArray) root.getChildren().add(elem);
-//		    }
-//		});
 
 		
 		//what happens if the sort button is clicked
@@ -157,6 +149,7 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 					elem.setY(y - elem.getHeight());
 					root.getChildren().addAll(elem);
 				}
+				//lowest.setText(cityArray[i] + tempArray[i] + "F");
 		    }
 		});
 		
@@ -167,40 +160,70 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 	}
 	
 	public void sortButtonClicked() {
-    	ArrayList<Integer> ints = masterCopyArray; 
-		int n = ints.size();
+//    	ArrayList<Integer> ints = masterCopyArray; 
+//		int n = tempArray.size();
+//		for (int i = 0; i < n-1; i++) {
+//	            // Find the minimum element in unsorted array
+//			int min_idx = i;
+//	        for (int j = i+1; j < n; j++)
+//	        	if (ints.get(j) < ints.get(min_idx))
+//	        		min_idx = j;
+//	  
+//	            // Swap the found minimum element with the first
+//	            // element
+//	        int temp = ints.get(min_idx);
+//	        ints.set(min_idx, ints.get(i));
+//	        ints.set(i, temp);
+//	        
+//	        String temp2 = cityArray[min_idx];
+//	        cityArray[min_idx] = cityArray[i];
+//	        cityArray[i] = temp2;
+//	        //"sort" the city array accordingly
+//	    }
+		
+		
+		int n = tempArray.length;
 		for (int i = 0; i < n-1; i++) {
 	            // Find the minimum element in unsorted array
 			int min_idx = i;
 	        for (int j = i+1; j < n; j++)
-	        	if (ints.get(j) < ints.get(min_idx))
+	        	if (tempArray[j] < tempArray[min_idx])
 	        		min_idx = j;
 	  
 	            // Swap the found minimum element with the first
 	            // element
-	        int temp = ints.get(min_idx);
-	        ints.set(min_idx, ints.get(i));
-	        ints.set(i, temp);
+	        int temp = tempArray[min_idx];
+	        tempArray[min_idx] = tempArray[i];
+	        tempArray[i] = temp;
+	        
+	        String temp2 = cityArray[min_idx];
+	        cityArray[min_idx] = cityArray[i];
+	        cityArray[i] = temp2;
+	        //"sort" the city array accordingly
 	    }
-    	//if (menuChoice != null) {
-    		//System.out.println("1");
-    		
-//    		if (menuChoice == null) {
-//    			System.out.println("choice is null");
-//    		} else if (menuChoice.equals("Selection Sort")) {
-//        		newArr = sorter.selectionSort(masterCopyArray);
-//        	} else if (menuChoice.equals("Gnome Sort")) {
-//        		newArr = sorter.gnomeSort(masterCopyArray);
-//        	} else if (menuChoice.equals("Bubble Sort")) {
-//        		newArr = sorter.bubbleSort(masterCopyArray);
-//        	}
-    		
+		
         	for (Rectangle elem: rectArray) elem.setVisible(false);
-        	for (int i = 0; i < ints.size(); i++) {
-    			Rectangle rect = new Rectangle(RECT_WIDTH, ints.get(i)*3);
+        	for (int i = 0; i < tempArray.length; i++) {
+    			Rectangle rect = new Rectangle(RECT_WIDTH, tempArray[i]*3);
     			rect.setStyle("-fx-fill: #32b10a");
     			rectArray.set(i, rect);
     		}
+        	
+        	//lowest.setStyle("-fx-fill: #000000");
+			//lowest.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+//			highest.setStyle("-fx-fill: #000000");
+//			highest.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
+//			highest.setLayoutY(highest.getHeight()+3);
+        	//lowest.setText("Lowest avg. temperature: " + cityArray[0] +  " " + tempArray[0] + "F");
+        	//highest.setText("Highest avg. temperature: " + cityArray[cityArray.length-1] + " " + tempArray[tempArray.length-1] + "F");
+	
+        	System.out.println(cityArray[10] + tempArray[10]);
+        	System.out.println(cityArray[0] + tempArray[0]);
+        	
+        	for (int elem: tempArray) System.out.print(elem + " ");
+        	
+        	//--------BIGMOMENT-----//
+        	//masterCopyArray = ints;
 	}
 
 	@Override
