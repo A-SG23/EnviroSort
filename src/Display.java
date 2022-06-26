@@ -14,9 +14,12 @@ import javafx.stage.Stage;
 
 public class Display extends Application {
 	
+	private Sorts sorter = new Sorts();
+	private static Data data = new Data();
+	private static int[] tempArray = data.temperatureData();
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 500;
-	private static final int DATA_ELEMENTS_LIMIT = 5;
+	private static final int DATA_ELEMENTS_LIMIT = data.temperatureData().length;
 	private static final int DATA_VALUE_LIMIT = WINDOW_HEIGHT/2;
 	private static final int SPACE_BETWEEN_RECT = 2;
 	private static final int RECT_WIDTH = (WINDOW_WIDTH - ((DATA_ELEMENTS_LIMIT-1)*SPACE_BETWEEN_RECT))/DATA_ELEMENTS_LIMIT;
@@ -24,7 +27,7 @@ public class Display extends Application {
 	private static final int MENU_WIDTH = 100;
 	private ArrayList<Integer> masterCopyArray = new ArrayList<Integer>(); //won't be changed
 	private ArrayList<Rectangle> rectArray = new ArrayList<Rectangle>();
-	private Sorts sorter = new Sorts();
+	
 	private ComboBox comboBox;
 	private long startTime;
 	private long endTime;
@@ -41,7 +44,6 @@ public class Display extends Application {
 //		}
 //	}
 
-	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
@@ -49,19 +51,22 @@ public class Display extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		System.out.println(tempArray.length);
 		stage.setTitle("SortX");
 		stage.setResizable(false);
+		
 		Group root = new Group();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		stage.setScene(scene);
 		stage.show();
 		
 		for (int i = 0; i < DATA_ELEMENTS_LIMIT; i++) {
-			masterCopyArray.add((int)(Math.random()*(DATA_VALUE_LIMIT)+1)); //
+			//masterCopyArray.add((int)(Math.random()*(DATA_VALUE_LIMIT)+1)); 
+			masterCopyArray.add(tempArray[i]);
 		}
 		
 		for (int elem: masterCopyArray) {
-			Rectangle rect = new Rectangle(RECT_WIDTH, elem);
+			Rectangle rect = new Rectangle(RECT_WIDTH, elem*4);
 			rect.setStyle("-fx-fill: #32b10a");
 			rectArray.add(rect);
 		}
@@ -98,21 +103,21 @@ public class Display extends Application {
 		sort.setTranslateY(MENU_HEIGHT*4);
 		root.getChildren().add(sort);
 		
-		Button randomize = new Button("Randomize!");
-		randomize.setPrefWidth(MENU_WIDTH); 
-		randomize.setPrefHeight(MENU_HEIGHT);
-		randomize.setTranslateX(WINDOW_WIDTH - 3*MENU_WIDTH/2);
-		randomize.setTranslateY(MENU_HEIGHT*4);
-		root.getChildren().add(randomize);
-		
-		
-		randomize.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-		    @Override 
-		    public void handle(ActionEvent e) {
-		    	randomizeButtonClicked();
-		    	for (Rectangle elem: rectArray) root.getChildren().add(elem);
-		    }
-		});
+//		Button randomize = new Button("Randomize!");
+//		randomize.setPrefWidth(MENU_WIDTH); 
+//		randomize.setPrefHeight(MENU_HEIGHT);
+//		randomize.setTranslateX(WINDOW_WIDTH - 3*MENU_WIDTH/2);
+//		randomize.setTranslateY(MENU_HEIGHT*4);
+//		root.getChildren().add(randomize);
+//		
+//		
+//		randomize.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+//		    @Override 
+//		    public void handle(ActionEvent e) {
+//		    	randomizeButtonClicked();
+//		    	for (Rectangle elem: rectArray) root.getChildren().add(elem);
+//		    }
+//		});
 
 		
 		//what happens if the sort button is clicked
@@ -170,7 +175,7 @@ public class Display extends Application {
         	}
         	for (Rectangle elem: rectArray) elem.setVisible(false);
         	for (int i = 0; i < newArr.size(); i++) {
-    			Rectangle rect = new Rectangle(RECT_WIDTH, newArr.get(i));
+    			Rectangle rect = new Rectangle(RECT_WIDTH, newArr.get(i)*4);
     			rect.setStyle("-fx-fill: #32b10a");
     			rectArray.set(i, rect);
     		}
@@ -179,6 +184,8 @@ public class Display extends Application {
 //    	}
 	}
 	
+	
+	/*
 	public void randomizeButtonClicked() {
 		
 		for (int i = 0; i < DATA_ELEMENTS_LIMIT; i++) {
@@ -199,6 +206,7 @@ public class Display extends Application {
 		}
 		
 	}
+	*/
 
 }
 
