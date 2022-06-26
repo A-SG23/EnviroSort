@@ -9,14 +9,21 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Display extends Application {
+public class Display extends Application implements EventHandler<MouseEvent> {
 	
 	private static Data data = new Data();
 	private static int[] tempArray = data.temperatureData();
+	private static String[] cityArray = data.getCities();
 	private static final int WINDOW_WIDTH = 800;
 	private static final int WINDOW_HEIGHT = 500;
 	private static final int DATA_ELEMENTS_LIMIT = data.temperatureData().length;
@@ -27,18 +34,63 @@ public class Display extends Application {
 	private static final int MENU_WIDTH = 100;
 	private ArrayList<Integer> masterCopyArray = new ArrayList<Integer>(); //won't be changed
 	private ArrayList<Rectangle> rectArray = new ArrayList<Rectangle>();
+	private Timer timer;
+	//private Group root;
+	
+	private Rectangle rect1;
+	private Text info = new Text();
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
 	}
+	
+	private class Timer extends AnimationTimer {
+
+		public void handle(long arg0) { //the timer's handle method
+			
+			int i = 0;
+			for (Rectangle elem: rectArray) { //for loop didnt work so for-each loop with a counter
+				// rect1 = rectArray.get(i);
+				rect1 = elem;
+				info = new Text();
+				info.setText(cityArray[i] + "; " + tempArray[i] + "F");
+				info.setStyle("-fx-fill: #000000");
+				info.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
+				
+				//info.setVisible(false);
+				rect1.setOnMouseEntered((EventHandler<MouseEvent>) new EventHandler<MouseEvent>() {
+					public void handle(MouseEvent mouseEvent) {
+//						info.setX((int)mouseEvent.getX());
+//						info.setY((int)mouseEvent.getY());
+						info.setX(elem.getX());
+						info.setY(elem.getY());
+						elem.setStyle("-fx-fill: #bbbbbb");
+						info.setVisible(true);
+						System.out.println("mouse entered");
+					}
+				});
+				
+				rect1.setOnMouseExited((EventHandler<MouseEvent>) new EventHandler<MouseEvent>() {
+					public void handle(MouseEvent mouseEvent) {
+						info.setVisible(false);
+						elem.setStyle("-fx-fill: #32b10a");
+						System.out.println("mouse exited");
+					}
+				});
+				i++;
+			}
+			
+		}
+		
+	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		stage.setTitle("SortX");
+		stage.setTitle("EnviroSort");
 		stage.setResizable(false);
 		
-		Group root = new Group();
+		Group root = new Group(); //-------CHANGE IF IT CRASHES HEHEHE--------//
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		stage.setScene(scene);
 		stage.show();
@@ -62,7 +114,10 @@ public class Display extends Application {
 			elem.setY(y - elem.getHeight());
 			root.getChildren().addAll(elem);
 		}
-
+		
+		timer = new Timer();
+		timer.start();
+		//root.getChildren().addAll(info);
 		
 		Button sort = new Button("Sort!");
 		sort.setPrefWidth(MENU_WIDTH); 
@@ -146,6 +201,12 @@ public class Display extends Application {
     			rect.setStyle("-fx-fill: #32b10a");
     			rectArray.set(i, rect);
     		}
+	}
+
+	@Override
+	public void handle(MouseEvent mouseEvent) {
+		
+		
 	}
 	
 	
