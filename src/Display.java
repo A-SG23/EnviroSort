@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 public class Display extends Application {
 	
-	private Sorts sorter = new Sorts();
 	private static Data data = new Data();
 	private static int[] tempArray = data.temperatureData();
 	private static final int WINDOW_WIDTH = 800;
@@ -36,7 +35,6 @@ public class Display extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		System.out.println(tempArray.length);
 		stage.setTitle("SortX");
 		stage.setResizable(false);
 		
@@ -114,7 +112,21 @@ public class Display extends Application {
 	}
 	
 	public void sortButtonClicked() {
-    	ArrayList<Integer> newArr = sorter.selectionSort(masterCopyArray);
+    	ArrayList<Integer> ints = masterCopyArray; 
+		int n = ints.size();
+		for (int i = 0; i < n-1; i++) {
+	            // Find the minimum element in unsorted array
+			int min_idx = i;
+	        for (int j = i+1; j < n; j++)
+	        	if (ints.get(j) < ints.get(min_idx))
+	        		min_idx = j;
+	  
+	            // Swap the found minimum element with the first
+	            // element
+	        int temp = ints.get(min_idx);
+	        ints.set(min_idx, ints.get(i));
+	        ints.set(i, temp);
+	    }
     	//if (menuChoice != null) {
     		//System.out.println("1");
     		
@@ -129,8 +141,8 @@ public class Display extends Application {
 //        	}
     		
         	for (Rectangle elem: rectArray) elem.setVisible(false);
-        	for (int i = 0; i < newArr.size(); i++) {
-    			Rectangle rect = new Rectangle(RECT_WIDTH, newArr.get(i)*4);
+        	for (int i = 0; i < ints.size(); i++) {
+    			Rectangle rect = new Rectangle(RECT_WIDTH, ints.get(i)*4);
     			rect.setStyle("-fx-fill: #32b10a");
     			rectArray.set(i, rect);
     		}
