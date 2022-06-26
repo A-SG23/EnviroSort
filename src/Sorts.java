@@ -3,12 +3,17 @@ import java.util.Arrays;
 
 public class Sorts {
 	public static void main(String[] args) {
-		ArrayList<Integer> arr = new ArrayList<Integer>(Arrays.asList(2, 7, 34, 4, 2, 7, 3, 24, 75, 24));
+		ArrayList<Integer> arr = new ArrayList<Integer>();
+		for (int i = 0; i < 10; i++) {
+			arr.add((int)(Math.random()*30)+1);
+		}
+		
+		
 		System.out.println(arr);
 		Sorts sort = new Sorts();
 		// System.out.println(sort.gnomeSort(arr));
 		System.out.println(sort.bubbleSort(arr));
-		System.out.println(sort.selectionSort(arr));
+		// System.out.println(sort.selectionSort(arr));
 		//System.out.println(sort.gnomeSort(arr));
 	}
 	
@@ -31,10 +36,10 @@ public class Sorts {
 
 	public ArrayList<Integer> bubbleSort(ArrayList<Integer> arr) {
 		ArrayList<Integer> ints = arr;
-		int size = ints.size();
-		for(int i = 0; i < size - 1; i++) {
-			for(int j = 0; j < size - i -1; j++) {
-				if(ints.get(j) > ints.get(j + 1)) {
+		int length = ints.size();
+		for(int i = 0; i < length - 1; i++) {
+			for(int j = 0; j < length - i - 1; j++) {
+				if(ints.get(j).compareTo(ints.get(j + 1)) > 0) {
 					int t = ints.get(j);
 					ints.set(j, j + 1);
 					ints.set(j + 1, t);
