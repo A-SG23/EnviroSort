@@ -67,7 +67,8 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 					public void handle(MouseEvent mouseEvent) {
 						
 						lowest.setText(cityArray[j] + " " + tempArray[j] + "F");
-						
+						lowest.setLayoutX(3);
+						lowest.setLayoutY(3);
 						info.setLayoutX(elem.getX());
 						info.setLayoutY(elem.getY() - 13);
 						elem.setStyle("-fx-fill: #bbbbbb");
