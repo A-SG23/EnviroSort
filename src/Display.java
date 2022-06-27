@@ -55,7 +55,7 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 				
 				Rectangle elem = rectArray.get(i);
 				rect1 = elem;
-				System.out.println(tempArray[i]);
+				//System.out.println(tempArray[i]);
 				
 				info.setStyle("-fx-fill: #000000");
 				info.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 10));
@@ -67,13 +67,15 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 					public void handle(MouseEvent mouseEvent) {
 						
 						lowest.setText(cityArray[j] + " " + tempArray[j] + "F");
-						lowest.setLayoutX(3);
-						lowest.setLayoutY(3);
+						lowest.setLayoutX(elem.getX() - lowest.getWidth()/2); //was 3
+						lowest.setLayoutY(elem.getY() - 20); // was 3
+						lowest.toFront();
 						info.setLayoutX(elem.getX());
 						info.setLayoutY(elem.getY() - 13);
-						elem.setStyle("-fx-fill: #bbbbbb");
+						elem.setStyle("-fx-fill: #2f9e6c");
 						info.setVisible(true);
 						lowest.setVisible(true);
+						
 					}
 				});
 				
@@ -81,7 +83,8 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 					public void handle(MouseEvent mouseEvent) {
 						info.setVisible(false);
 						lowest.setVisible(false);
-						elem.setStyle("-fx-fill: #32b10a");
+						elem.setStyle("-fx-fill: #3cc788");
+						
 						
 					}
 				});
@@ -99,17 +102,16 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 		stage.setTitle("EnviroSort");
 		stage.setResizable(false);
 		
-		
 		Group root = new Group();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		stage.setScene(scene);
 		stage.show();
 		root.getChildren().addAll(info, lowest);
-	root.setStyle("-fx-background-color: #c8f0f7");
+		//root.setStyle("-fx-background-color: #c8f0f7");
 		
 		for (int elem: tempArray) {
 			Rectangle rect = new Rectangle(RECT_WIDTH, elem*3);
-			rect.setStyle("-fx-fill: #32b10a");
+			rect.setStyle("-fx-fill: #3cc788");
 			rectArray.add(rect);
 		} 
 		
@@ -154,7 +156,17 @@ public class Display extends Application implements EventHandler<MouseEvent> {
 		    }
 		});
 		
-
+		ObservableList<String> options = 
+				FXCollections.observableArrayList(
+			        "Temperature",
+			        "Rainfall",
+			        "Carbon emissions"
+			    );
+		ComboBox menu = new ComboBox(options);
+		menu.setLayoutX(5);
+		menu.setLayoutY(20);
+		root.getChildren().add(menu);
+		
 		stage.setScene(scene);
 		stage.show();
 	
@@ -206,7 +218,7 @@ public class Display extends Application implements EventHandler<MouseEvent> {
         	for (Rectangle elem: rectArray) elem.setVisible(false);
         	for (int i = 0; i < tempArray.length; i++) {
     			Rectangle rect = new Rectangle(RECT_WIDTH, tempArray[i]*3);
-    			rect.setStyle("-fx-fill: #32b10a");
+    			rect.setStyle("-fx-fill: #3cc788");
     			rectArray.set(i, rect);
     		}
         	
